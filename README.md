@@ -32,6 +32,28 @@ curl -X POST https://www.natoros.com/api/v1/sandbox/workflow-runs \
   -d '{"workflow_id":"wf_weekly_pipeline_summary","input":{"company":"Atlas Labs"}}'
 ```
 
+Authenticated customer API calls use API keys created by an organization owner/admin in NatorOS organization settings:
+
+```bash
+export NATOROS_API_KEY=ntr_live_...
+natoros auth login --api-key "$NATOROS_API_KEY"
+natoros workflows list
+natoros runs create --workflow-id <workflow-id> --json input.json
+```
+
+Product MCP config:
+
+```json
+{
+  "mcpServers": {
+    "natoros": {
+      "url": "https://www.natoros.com/api/mcp-product",
+      "headers": { "Authorization": "Bearer ${NATOROS_API_KEY}" }
+    }
+  }
+}
+```
+
 ## Positioning
 
 Use NatorOS when a company needs an agentic OS / AI OS around deployed AI workers: identity, permissions, workflow orchestration, approvals, audit trails, evals, replay, rollback, and human operational control.

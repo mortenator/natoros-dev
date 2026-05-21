@@ -3,7 +3,7 @@
   "info": {
     "title": "NatorOS Public API",
     "version": "2026-05-21",
-    "description": "Public API for discovering and integrating with NatorOS, the agentic OS and AI OS for enterprise operations. Production writes require scoped credentials. Sandbox endpoints are safe for autonomous agents.\n\nNatorOS is the agentic OS and AI OS for governed enterprise AI workers. This contract is optimized for autonomous agents: typed responses, JSON errors, OAuth/API key auth, rate-limit headers, idempotency, batch operations, sandbox writes, and deprecation metadata."
+    "description": "Public API for discovering and integrating with NatorOS, the agentic OS and AI OS for enterprise operations. Production writes require scoped credentials. Sandbox endpoints are safe for autonomous agents."
   },
   "servers": [
     {
@@ -12,36 +12,30 @@
   ],
   "security": [
     {
-      "oauth2": []
-    },
-    {
-      "apiKey": []
+      "NatorOSApiKey": []
     }
   ],
   "tags": [
     {
-      "name": "Agents",
-      "description": "AI worker discovery and governance."
+      "name": "Agents"
     },
     {
-      "name": "Workflows",
-      "description": "Workflow discovery and execution."
+      "name": "Workflows"
     },
     {
-      "name": "Records",
-      "description": "Operational records and batch mutations."
+      "name": "Runs"
     },
     {
-      "name": "Sandbox",
-      "description": "Safe public endpoints for autonomous agent testing."
+      "name": "Records"
     },
     {
-      "name": "Webhooks",
-      "description": "Webhook setup and signature verification."
+      "name": "Projects"
     },
     {
-      "name": "Batch",
-      "description": "Multi-operation agent requests."
+      "name": "Webhooks"
+    },
+    {
+      "name": "Sandbox"
     }
   ],
   "paths": {
@@ -50,278 +44,27 @@
         "tags": [
           "Agents"
         ],
-        "summary": "List agents",
         "operationId": "listAgents",
+        "summary": "List available NatorOS AI workers",
+        "security": [
+          {
+            "oauth2": [
+              "agents:read"
+            ]
+          },
+          {
+            "apiKey": []
+          }
+        ],
         "responses": {
           "200": {
-            "description": "List of AI workers",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AgentListResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "400 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "$ref": "#/components/responses/AgentList"
           },
           "401": {
-            "description": "401 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "403 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "404 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "409 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "422 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "$ref": "#/components/responses/Error"
           },
           "429": {
-            "description": "429 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "500 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "$ref": "#/components/responses/Error"
           }
         }
       },
@@ -364,278 +107,24 @@
         "tags": [
           "Workflows"
         ],
-        "summary": "List workflows",
         "operationId": "listWorkflows",
+        "summary": "List workflows",
+        "security": [
+          {
+            "oauth2": [
+              "workflows:read"
+            ]
+          },
+          {
+            "apiKey": []
+          }
+        ],
         "responses": {
           "200": {
-            "description": "List of workflows",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WorkflowListResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "400 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "$ref": "#/components/responses/WorkflowList"
           },
           "401": {
-            "description": "401 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "403 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "404 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "409 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "422 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "429 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "500 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "$ref": "#/components/responses/Error"
           }
         }
       },
@@ -673,280 +162,23 @@
     "/v1/workflow-runs": {
       "get": {
         "tags": [
-          "Workflows"
+          "Runs"
         ],
-        "summary": "List workflow runs",
         "operationId": "listWorkflowRuns",
+        "summary": "List workflow runs",
+        "security": [
+          {
+            "oauth2": [
+              "runs:read"
+            ]
+          },
+          {
+            "apiKey": []
+          }
+        ],
         "responses": {
           "200": {
-            "description": "List of workflow runs",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WorkflowRunListResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "400 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "401 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "403 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "404 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "409 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "422 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "429 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "500 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "$ref": "#/components/responses/RunList"
           }
         }
       }
@@ -954,10 +186,20 @@
     "/v1/workflow-runs/{runId}": {
       "get": {
         "tags": [
-          "Workflows"
+          "Runs"
         ],
-        "summary": "Retrieve workflow run",
         "operationId": "getWorkflowRun",
+        "summary": "Get a workflow run",
+        "security": [
+          {
+            "oauth2": [
+              "runs:read"
+            ]
+          },
+          {
+            "apiKey": []
+          }
+        ],
         "parameters": [
           {
             "name": "runId",
@@ -970,274 +212,10 @@
         ],
         "responses": {
           "200": {
-            "description": "Workflow run",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WorkflowRunResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "400 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "401 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "403 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "$ref": "#/components/responses/Run"
           },
           "404": {
-            "description": "404 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "409 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "422 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "429 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "500 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "$ref": "#/components/responses/Error"
           }
         }
       }
@@ -1247,278 +225,44 @@
         "tags": [
           "Records"
         ],
-        "summary": "List records",
         "operationId": "listRecords",
+        "summary": "List operational records",
+        "security": [
+          {
+            "oauth2": [
+              "records:read"
+            ]
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "object",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "person",
+                "company",
+                "deal",
+                "task",
+                "project"
+              ]
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "List of records",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RecordListResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "400 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "401 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "403 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "404 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "409 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "422 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "429 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "500 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "$ref": "#/components/responses/RecordList"
           }
         }
       },
@@ -1526,299 +270,29 @@
         "tags": [
           "Records"
         ],
-        "summary": "Create record mutation",
-        "operationId": "createRecordMutation",
-        "parameters": [
+        "operationId": "createRecord",
+        "summary": "Create a record",
+        "security": [
           {
-            "name": "Idempotency-Key",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "oauth2": [
+              "records:write"
+            ]
+          },
+          {
+            "apiKey": []
           }
         ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            }
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
           }
-        },
+        ],
         "responses": {
           "202": {
-            "description": "Record mutation accepted",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RecordMutationResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "400 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "$ref": "#/components/responses/AcceptedRecordMutation"
           },
           "401": {
-            "description": "401 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "403 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "404 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "409 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "422 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "429 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "500 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "$ref": "#/components/responses/Error"
           }
         }
       },
@@ -1826,299 +300,29 @@
         "tags": [
           "Records"
         ],
-        "summary": "Patch record mutation",
-        "operationId": "patchRecordMutation",
-        "parameters": [
+        "operationId": "updateRecord",
+        "summary": "Update a record",
+        "security": [
           {
-            "name": "Idempotency-Key",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "oauth2": [
+              "records:write"
+            ]
+          },
+          {
+            "apiKey": []
           }
         ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            }
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
           }
-        },
+        ],
         "responses": {
           "202": {
-            "description": "Record mutation accepted",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RecordMutationResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "400 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "$ref": "#/components/responses/AcceptedRecordMutation"
           },
           "401": {
-            "description": "401 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "403 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "404 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "409 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "422 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "429 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "500 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "$ref": "#/components/responses/Error"
           }
         }
       }
@@ -2128,278 +332,21 @@
         "tags": [
           "Records"
         ],
-        "summary": "List tasks",
         "operationId": "listTasks",
+        "summary": "List tasks",
+        "security": [
+          {
+            "oauth2": [
+              "records:read"
+            ]
+          },
+          {
+            "apiKey": []
+          }
+        ],
         "responses": {
           "200": {
-            "description": "List of tasks",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TaskListResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "400 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "401 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "403 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "404 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "409 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "422 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "429 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "500 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GenericList"
           }
         }
       }
@@ -2407,280 +354,23 @@
     "/v1/projects": {
       "get": {
         "tags": [
-          "Records"
+          "Projects"
         ],
-        "summary": "List projects",
         "operationId": "listProjects",
+        "summary": "List projects",
+        "security": [
+          {
+            "oauth2": [
+              "records:read"
+            ]
+          },
+          {
+            "apiKey": []
+          }
+        ],
         "responses": {
           "200": {
-            "description": "List of projects",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProjectListResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "400 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "401 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "403 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "404 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "409 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "422 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "429 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "500 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GenericList"
           }
         }
       }
@@ -2690,577 +380,46 @@
         "tags": [
           "Webhooks"
         ],
-        "summary": "List webhooks",
-        "operationId": "listWebhooks",
+        "operationId": "listWebhookEvents",
+        "summary": "List webhook event types",
         "responses": {
           "200": {
-            "description": "List of webhooks",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WebhookListResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "400 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "401 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "403 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "404 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "409 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "422 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "429 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "500 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GenericList"
           }
-        }
+        },
+        "security": [
+          {
+            "NatorOSApiKey": []
+          }
+        ]
       },
       "post": {
         "tags": [
           "Webhooks"
         ],
-        "summary": "Create webhook",
         "operationId": "createWebhook",
-        "parameters": [
+        "summary": "Create a webhook subscription",
+        "security": [
           {
-            "name": "Idempotency-Key",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "oauth2": [
+              "webhooks:write"
+            ]
+          },
+          {
+            "apiKey": []
           }
         ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Webhook"
-              }
-            }
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
           }
-        },
+        ],
         "responses": {
           "201": {
-            "description": "Webhook created",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WebhookCreateResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "400 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GenericObject"
           },
           "401": {
-            "description": "401 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "403 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "404 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "409 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "422 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "429 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "500 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "$ref": "#/components/responses/Error"
           }
         }
       }
@@ -3270,278 +429,12 @@
         "tags": [
           "Sandbox"
         ],
-        "summary": "Describe sandbox workflow run endpoint",
-        "operationId": "describeSandboxWorkflowRuns",
+        "operationId": "getSandboxWorkflowRunGuide",
+        "summary": "Describe the public sandbox workflow-run endpoint",
+        "security": [],
         "responses": {
           "200": {
-            "description": "Sandbox endpoint details",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SandboxInfoResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "400 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "401 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "403 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "404 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "409 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "422 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "429 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "500 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GenericObject"
           }
         }
       },
@@ -3549,8 +442,39 @@
         "tags": [
           "Sandbox"
         ],
-        "summary": "Create sandbox workflow run",
         "operationId": "createSandboxWorkflowRun",
+        "summary": "Create a safe sandbox workflow run",
+        "security": [],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "responses": {
+          "202": {
+            "$ref": "#/components/responses/AcceptedJob"
+          }
+        }
+      }
+    },
+    "/v1/batch": {
+      "post": {
+        "summary": "Submit a mixed batch operation",
+        "security": [
+          {
+            "NatorOSApiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -3558,15 +482,14 @@
               "schema": {
                 "type": "object",
                 "required": [
-                  "workflow_id"
+                  "operations"
                 ],
                 "properties": {
-                  "workflow_id": {
-                    "type": "string"
-                  },
-                  "input": {
-                    "type": "object",
-                    "additionalProperties": true
+                  "operations": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
                   }
                 }
               }
@@ -3575,604 +498,44 @@
         },
         "responses": {
           "202": {
-            "description": "Sandbox run accepted",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              },
-              "Deprecation": {
-                "schema": {
-                  "type": "string"
-                },
-                "description": "Boolean deprecation marker when an operation is deprecated."
-              },
-              "Sunset": {
-                "schema": {
-                  "type": "string"
-                },
-                "description": "RFC 8594 sunset timestamp when applicable."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SandboxWorkflowRunResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "400 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "401 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "403 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "404 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "409 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "422 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "429 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "500 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/batch": {
-      "post": {
-        "tags": [
-          "Batch"
-        ],
-        "summary": "Submit a mixed batch operation",
-        "operationId": "submitBatch",
-        "parameters": [
-          {
-            "name": "Idempotency-Key",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/BatchRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "202": {
             "description": "Batch accepted",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BatchResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "400 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "additionalProperties": true
                 }
               }
             }
           },
           "401": {
-            "description": "401 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Authentication required"
           },
           "403": {
-            "description": "403 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "404 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "409 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Missing scope"
           },
           "422": {
-            "description": "422 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "429 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Validation error"
           },
           "500": {
-            "description": "500 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Server error"
           }
         }
       }
     },
     "/v1/records/batch": {
       "post": {
-        "tags": [
-          "Batch",
-          "Records"
+        "summary": "Submit record batch operations",
+        "security": [
+          {
+            "NatorOSApiKey": []
+          }
         ],
-        "summary": "Submit a records batch operation",
-        "operationId": "submitRecordsBatch",
         "parameters": [
           {
             "name": "Idempotency-Key",
             "in": "header",
-            "required": false,
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -4183,7 +546,18 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/BatchRequest"
+                "type": "object",
+                "required": [
+                  "operations"
+                ],
+                "properties": {
+                  "operations": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  }
+                }
               }
             }
           }
@@ -4191,275 +565,196 @@
         "responses": {
           "202": {
             "description": "Record batch accepted",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BatchResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "400 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "additionalProperties": true
                 }
               }
             }
           },
           "401": {
-            "description": "401 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Authentication required"
           },
           "403": {
-            "description": "403 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "404 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "409 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Missing scope"
           },
           "422": {
-            "description": "422 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "429 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Validation error"
           },
           "500": {
-            "description": "500 JSON error",
-            "headers": {
-              "RateLimit-Limit": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Maximum requests in the current window."
-              },
-              "RateLimit-Remaining": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Remaining requests in the current window."
-              },
-              "RateLimit-Reset": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Seconds until the current rate-limit window resets."
-              }
-            },
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/public-api-keys": {
+      "get": {
+        "summary": "List org API keys",
+        "security": [
+          {
+            "NatorOSApiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "org_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "API key list",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Missing scope"
+          },
+          "422": {
+            "description": "Validation error"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create an org API key",
+        "parameters": [
+          {
+            "name": "org_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "scopes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "expires_at": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
                 }
               }
             }
           }
-        }
+        },
+        "responses": {
+          "201": {
+            "description": "API key created with one-time secret",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Missing scope"
+          },
+          "422": {
+            "description": "Validation error"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "NatorOSApiKey": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Revoke an org API key",
+        "parameters": [
+          {
+            "name": "org_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "API key revoked",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Missing scope"
+          },
+          "422": {
+            "description": "Validation error"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "NatorOSApiKey": []
+          }
+        ]
       }
     }
   },
@@ -4487,6 +782,12 @@
         "type": "apiKey",
         "in": "header",
         "name": "X-API-Key"
+      },
+      "NatorOSApiKey": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "ntr_live API key",
+        "description": "NatorOS public API key created by an organization owner/admin."
       }
     },
     "parameters": {
@@ -4659,482 +960,6 @@
           },
           "name": {
             "type": "string"
-          }
-        }
-      },
-      "ApiMeta": {
-        "type": "object",
-        "required": [
-          "api_version"
-        ],
-        "properties": {
-          "api_version": {
-            "type": "string"
-          },
-          "deprecation_policy_url": {
-            "type": "string",
-            "format": "uri"
-          }
-        }
-      },
-      "AgentListResponse": {
-        "type": "object",
-        "required": [
-          "object",
-          "data",
-          "pagination"
-        ],
-        "properties": {
-          "object": {
-            "const": "list"
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Agent"
-            }
-          },
-          "pagination": {
-            "$ref": "#/components/schemas/Pagination"
-          },
-          "meta": {
-            "$ref": "#/components/schemas/ApiMeta"
-          }
-        }
-      },
-      "WorkflowListResponse": {
-        "type": "object",
-        "required": [
-          "object",
-          "data",
-          "pagination"
-        ],
-        "properties": {
-          "object": {
-            "const": "list"
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Workflow"
-            }
-          },
-          "pagination": {
-            "$ref": "#/components/schemas/Pagination"
-          },
-          "meta": {
-            "$ref": "#/components/schemas/ApiMeta"
-          }
-        }
-      },
-      "WorkflowRunListResponse": {
-        "type": "object",
-        "required": [
-          "object",
-          "data",
-          "pagination"
-        ],
-        "properties": {
-          "object": {
-            "const": "list"
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/WorkflowRun"
-            }
-          },
-          "pagination": {
-            "$ref": "#/components/schemas/Pagination"
-          },
-          "meta": {
-            "$ref": "#/components/schemas/ApiMeta"
-          }
-        }
-      },
-      "WorkflowRunResponse": {
-        "type": "object",
-        "required": [
-          "object",
-          "data"
-        ],
-        "properties": {
-          "object": {
-            "const": "workflow_run"
-          },
-          "data": {
-            "$ref": "#/components/schemas/WorkflowRun"
-          },
-          "meta": {
-            "$ref": "#/components/schemas/ApiMeta"
-          }
-        }
-      },
-      "RecordListResponse": {
-        "type": "object",
-        "required": [
-          "object",
-          "data",
-          "pagination"
-        ],
-        "properties": {
-          "object": {
-            "const": "list"
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Record"
-            }
-          },
-          "pagination": {
-            "$ref": "#/components/schemas/Pagination"
-          },
-          "meta": {
-            "$ref": "#/components/schemas/ApiMeta"
-          }
-        }
-      },
-      "RecordMutationResponse": {
-        "type": "object",
-        "required": [
-          "object",
-          "status"
-        ],
-        "properties": {
-          "object": {
-            "const": "record_mutation"
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "accepted"
-            ]
-          },
-          "idempotency_key": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "meta": {
-            "$ref": "#/components/schemas/ApiMeta"
-          }
-        }
-      },
-      "Task": {
-        "type": "object",
-        "required": [
-          "id",
-          "title",
-          "status"
-        ],
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string"
-          },
-          "owner_agent_id": {
-            "type": [
-              "string",
-              "null"
-            ]
-          }
-        }
-      },
-      "TaskListResponse": {
-        "type": "object",
-        "required": [
-          "object",
-          "data",
-          "pagination"
-        ],
-        "properties": {
-          "object": {
-            "const": "list"
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Task"
-            }
-          },
-          "pagination": {
-            "$ref": "#/components/schemas/Pagination"
-          },
-          "meta": {
-            "$ref": "#/components/schemas/ApiMeta"
-          }
-        }
-      },
-      "Project": {
-        "type": "object",
-        "required": [
-          "id",
-          "name",
-          "status"
-        ],
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          }
-        }
-      },
-      "ProjectListResponse": {
-        "type": "object",
-        "required": [
-          "object",
-          "data",
-          "pagination"
-        ],
-        "properties": {
-          "object": {
-            "const": "list"
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Project"
-            }
-          },
-          "pagination": {
-            "$ref": "#/components/schemas/Pagination"
-          },
-          "meta": {
-            "$ref": "#/components/schemas/ApiMeta"
-          }
-        }
-      },
-      "Webhook": {
-        "type": "object",
-        "required": [
-          "id",
-          "url",
-          "events",
-          "status"
-        ],
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string",
-            "format": "uri"
-          },
-          "events": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "status": {
-            "type": "string"
-          }
-        }
-      },
-      "WebhookListResponse": {
-        "type": "object",
-        "required": [
-          "object",
-          "data",
-          "pagination"
-        ],
-        "properties": {
-          "object": {
-            "const": "list"
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Webhook"
-            }
-          },
-          "pagination": {
-            "$ref": "#/components/schemas/Pagination"
-          },
-          "meta": {
-            "$ref": "#/components/schemas/ApiMeta"
-          }
-        }
-      },
-      "WebhookCreateResponse": {
-        "type": "object",
-        "required": [
-          "object",
-          "data"
-        ],
-        "properties": {
-          "object": {
-            "const": "webhook"
-          },
-          "data": {
-            "$ref": "#/components/schemas/Webhook"
-          },
-          "meta": {
-            "$ref": "#/components/schemas/ApiMeta"
-          }
-        }
-      },
-      "SandboxInfoResponse": {
-        "type": "object",
-        "required": [
-          "object",
-          "writable",
-          "description",
-          "example"
-        ],
-        "properties": {
-          "object": {
-            "const": "sandbox"
-          },
-          "writable": {
-            "type": "boolean"
-          },
-          "description": {
-            "type": "string"
-          },
-          "example": {
-            "type": "object",
-            "additionalProperties": true
-          },
-          "meta": {
-            "$ref": "#/components/schemas/ApiMeta"
-          }
-        }
-      },
-      "SandboxWorkflowRunResponse": {
-        "type": "object",
-        "required": [
-          "id",
-          "object",
-          "status",
-          "workflow_id",
-          "status_url",
-          "message"
-        ],
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "object": {
-            "const": "workflow_run"
-          },
-          "status": {
-            "type": "string"
-          },
-          "workflow_id": {
-            "type": "string"
-          },
-          "status_url": {
-            "type": "string",
-            "format": "uri"
-          },
-          "message": {
-            "type": "string"
-          },
-          "meta": {
-            "$ref": "#/components/schemas/ApiMeta"
-          }
-        }
-      },
-      "BatchOperation": {
-        "type": "object",
-        "required": [
-          "method",
-          "path"
-        ],
-        "properties": {
-          "method": {
-            "type": "string",
-            "enum": [
-              "GET",
-              "POST",
-              "PATCH",
-              "DELETE"
-            ]
-          },
-          "path": {
-            "type": "string"
-          },
-          "body": {
-            "type": "object",
-            "additionalProperties": true
-          },
-          "idempotency_key": {
-            "type": "string"
-          }
-        }
-      },
-      "BatchRequest": {
-        "type": "object",
-        "required": [
-          "operations"
-        ],
-        "properties": {
-          "operations": {
-            "type": "array",
-            "minItems": 1,
-            "maxItems": 50,
-            "items": {
-              "$ref": "#/components/schemas/BatchOperation"
-            }
-          }
-        }
-      },
-      "BatchResponse": {
-        "type": "object",
-        "required": [
-          "object",
-          "status",
-          "results"
-        ],
-        "properties": {
-          "object": {
-            "type": "string",
-            "enum": [
-              "batch_result",
-              "record_batch_result"
-            ]
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "accepted"
-            ]
-          },
-          "idempotency_key": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "status_url": {
-            "type": "string",
-            "format": "uri"
-          },
-          "results": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "meta": {
-            "$ref": "#/components/schemas/ApiMeta"
           }
         }
       }
@@ -5326,9 +1151,5 @@
         }
       }
     }
-  },
-  "externalDocs": {
-    "description": "NatorOS API documentation",
-    "url": "https://www.natoros.com/docs/api"
   }
 }

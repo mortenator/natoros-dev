@@ -10,8 +10,8 @@ export class NatorOSClient {
   async request(path, { method = "GET", body, idempotencyKey } = {}) {
     const headers = { Accept: "application/json" };
     if (body !== undefined) headers["Content-Type"] = "application/json";
-    if (this.accessToken) headers.Authorization = `Bearer ${this.accessToken}`;
-    if (this.apiKey) headers["X-API-Key"] = this.apiKey;
+    if (this.apiKey) headers.Authorization = `Bearer ${this.apiKey}`;
+    else if (this.accessToken) headers.Authorization = `Bearer ${this.accessToken}`;
     if (idempotencyKey) headers["Idempotency-Key"] = idempotencyKey;
 
     const response = await fetch(`${this.baseUrl}${path}`, {
@@ -35,6 +35,42 @@ export class NatorOSClient {
 
   listWorkflows() {
     return this.request("/v1/workflows");
+  }
+
+  listWorkflowRuns() {
+    return this.request("/v1/workflow-runs");
+  }
+
+  listTasks() {
+    return this.request("/v1/tasks");
+  }
+
+  listRecords(object = "tasks") {
+    return this.request(`/v1/records?object=${encodeURIComponent(object)}`);
+  }
+
+  createWorkflowRun(workflowId, input = {}, { idempotencyKey = crypto.randomUUID() } = {}) {
+    return this.request("/v1/workflow-runs", {
+      method: "POST",
+      body: { workflow_id: workflowId, input },
+      idempotencyKey,
+    });
+  }
+
+  createTask(title, fields = {}, { idempotencyKey = crypto.randomUUID() } = {}) {
+    return this.request("/v1/tasks", {
+      method: "POST",
+      body: { title, ...fields },
+      idempotencyKey,
+    });
+  }
+
+  updateTask(id, fields = {}, { idempotencyKey = crypto.randomUUID() } = {}) {
+    return this.request("/v1/tasks", {
+      method: "PATCH",
+      body: { id, ...fields },
+      idempotencyKey,
+    });
   }
 
   createSandboxWorkflowRun(workflowId, input = {}) {
