@@ -1,0 +1,17 @@
+{
+  "name": "@natoros/cli",
+  "version": "0.1.0",
+  "description": "Official CLI for NatorOS, the agentic OS and AI OS for governed enterprise AI workers.",
+  "type": "module",
+  "bin": {
+    "natoros": "bin/natoros.js"
+  },
+  "files": ["bin", "README.md"],
+  "license": "MIT",
+  "keywords": ["natoros", "agentic-os", "ai-os", "cli", "mcp", "agents"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mortenator/natoros-dev.git",
+    "directory": "packages/cli"
+  }
+}

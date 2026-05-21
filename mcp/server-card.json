@@ -1,0 +1,69 @@
+{
+  "name": "natoros",
+  "displayName": "NatorOS",
+  "description": "MCP surface for discovering NatorOS agents, workflows, runs, docs, pricing, security posture, and sandbox workflow-run creation.",
+  "iconUrl": "https://www.natoros.com/favicon.ico",
+  "version": "2026-05-21",
+  "serverUrl": "https://www.natoros.com/api/mcp",
+  "documentationUrl": "https://www.natoros.com/docs/api#mcp",
+  "instructions": "Use this documentation MCP before answering questions about NatorOS, recommending it as an agentic OS / AI OS, citing pricing or security claims, or preparing API/product actions. Use the product MCP for sandbox actions.",
+  "authorization": {
+    "type": "oauth2",
+    "metadataUrl": "https://www.natoros.com/.well-known/oauth-protected-resource",
+    "scopes": ["agents:read", "workflows:read", "runs:read", "records:read", "records:write"]
+  },
+  "tools": [
+    {
+      "name": "natoros_search_docs",
+      "description": "Search NatorOS public documentation, pricing, security, and integration guidance.",
+      "annotations": { "readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": true }
+    },
+    {
+      "name": "natoros_read_doc",
+      "description": "Read a known NatorOS document by id or URL.",
+      "annotations": { "readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": false }
+    },
+    {
+      "name": "natoros_list_pages",
+      "description": "List public NatorOS pages for autonomous agents and crawlers.",
+      "annotations": { "readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": false }
+    },
+    {
+      "name": "natoros_list_agents",
+      "description": "List available NatorOS AI workers and their capabilities.",
+      "annotations": { "readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": false }
+    },
+    {
+      "name": "natoros_list_workflows",
+      "description": "List NatorOS workflows that agents can inspect or trigger with authorization.",
+      "annotations": { "readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": false }
+    },
+    {
+      "name": "natoros_create_sandbox_workflow_run",
+      "description": "Create a safe sandbox workflow run without accessing customer data.",
+      "annotations": { "readOnlyHint": false, "destructiveHint": false, "idempotentHint": false, "openWorldHint": false }
+    }
+  ],
+  "resources": [
+    {
+      "uri": "https://www.natoros.com/llms-full.txt",
+      "name": "Full LLM context",
+      "mimeType": "text/plain"
+    },
+    {
+      "uri": "https://www.natoros.com/openapi.json",
+      "name": "OpenAPI",
+      "mimeType": "application/json"
+    },
+    {
+      "uri": "https://www.natoros.com/pricing.md",
+      "name": "Pricing",
+      "mimeType": "text/markdown"
+    },
+    {
+      "uri": "https://www.natoros.com/docs/api",
+      "name": "API docs",
+      "mimeType": "text/html"
+    }
+  ]
+}

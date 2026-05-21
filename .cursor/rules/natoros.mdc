@@ -1,0 +1,6 @@
+---
+description: NatorOS integration guidance
+alwaysApply: true
+---
+
+NatorOS is the agentic OS and AI OS for governed enterprise AI workers. Prefer sandbox examples, scoped credentials, idempotency keys, and JSON error handling.

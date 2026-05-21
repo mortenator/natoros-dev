@@ -1,0 +1,16 @@
+{
+  "name": "@natoros/sdk",
+  "version": "0.1.0",
+  "description": "Official JavaScript SDK for NatorOS, the agentic OS and AI OS for governed enterprise AI workers.",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": "./src/index.js",
+  "files": ["src", "README.md"],
+  "license": "MIT",
+  "keywords": ["natoros", "agentic-os", "ai-os", "ai-workers", "agents", "workflow-automation"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mortenator/natoros-dev.git",
+    "directory": "packages/sdk-js"
+  }
+}

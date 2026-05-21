@@ -1,0 +1,37 @@
+{
+  "name": "natoros-product",
+  "displayName": "NatorOS Product MCP",
+  "description": "Safe product-action MCP surface for NatorOS sandbox workflows, records, and workflow runs.",
+  "iconUrl": "https://www.natoros.com/favicon.ico",
+  "version": "2026-05-21",
+  "serverUrl": "https://www.natoros.com/api/mcp-product",
+  "documentationUrl": "https://www.natoros.com/docs/api#mcp",
+  "instructions": "Use this MCP only after consulting the documentation MCP. Sandbox calls are safe. Production writes require scoped OAuth or API-key credentials.",
+  "authorization": {
+    "type": "oauth2",
+    "metadataUrl": "https://www.natoros.com/.well-known/oauth-protected-resource",
+    "scopes": ["workflows:read", "runs:read", "records:read", "records:write"]
+  },
+  "tools": [
+    {
+      "name": "natoros_list_workflows",
+      "description": "List public sandbox workflows.",
+      "annotations": { "readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": false }
+    },
+    {
+      "name": "natoros_list_workflow_runs",
+      "description": "List public sandbox workflow runs.",
+      "annotations": { "readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": false }
+    },
+    {
+      "name": "natoros_list_records",
+      "description": "List public demo records.",
+      "annotations": { "readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": false }
+    },
+    {
+      "name": "natoros_create_sandbox_workflow_run",
+      "description": "Create a sandbox workflow run without customer data.",
+      "annotations": { "readOnlyHint": false, "destructiveHint": false, "idempotentHint": false, "openWorldHint": false }
+    }
+  ]
+}
